@@ -1,0 +1,40 @@
+extends layout
+
+block content
+    h1 #{customer.fullname}
+    p(style='font-weight: bold') Telefon: #{customer.phone}
+    p E-mail: #{customer.email}
+    p Poznámka: #{customer.note}
+
+    div(style='margin-left:20px;margin-top:20px')
+
+    p
+        a(href=customer.url+'/update') Upravit detaily
+
+    h4 Objednávky
+
+    ul
+            - customer_visits.sort(function(a, b) {let dateA = new Date(a.date_from); let dateB = new Date(b.date_to); return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;});
+            each visit in customer_visits
+                li
+                    a(href=visit.url)  #{visit.date}, #{visit.time_from} - #{visit.time_to}
+                    |  #{visit.note}
+            else
+                p Žádné objednávky
+
+    p
+        a(href='/visits/create?customerid=' + customer._id) Nová objednávka
+    hr
+    p
+       form(method='POST' action='')
+        div.form-group
+            input#customerid.form-control(type='hidden', name='customerid', require='true', value=customer._id )
+        button.btn.btn-primary(type='submit') Smazat
+
+        form(method='GET' action=customer.url+'/update')
+         div.form-group
+             input#customerid.form-control(type='hidden', name='customerid', required='true', value=customer._id)
+         button.btn.btn-primary(type='submit') Upravit
+
+
+

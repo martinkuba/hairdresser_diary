@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    h1=title
+    p Zákazník: #[strong #{visit.customer.fullname}]
+    p Datum: #{visit.date}
+    p Od: #{visit.time_from}
+    p Do: #{visit.time_to}
+    p Poznámka: #{visit.note}
+
+    p
+           form(method='GET' action=visit.url+'/update')
+            div.form-group
+                input#visit.form-control(type='hidden', name='visitid', required='true', value=visit._id)
+            button.btn.btn-primary(type='submit') Upravit
+
+           form(method='GET' action=visit.url+'/delete')
+            div.form-group
+                 input#visit.form-control(type='hidden', name='visitid', require='true', value=visit._id )
+            button.btn.btn-primary(type='submit') Smazat

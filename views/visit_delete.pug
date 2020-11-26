@@ -1,0 +1,43 @@
+extends layout
+
+block content
+    h1=title
+
+    if visit
+        p
+            text Opravdu chcete smazat následující objednávku?
+        p
+            text id: #{visit._id} &nbsp;
+            br
+            text date_from: #{visit.date_from}
+            br
+            text date_to: #{visit.date_to}
+            br
+            text date: #{visit.date}
+            br
+            text time_from: #{visit.time_from}
+            br
+            text time_to: #{visit.time_to}
+            br
+            text note: #{visit.note}
+            br
+            text customer.id: #{visit.customer.id}
+            br
+            text customer.fullname: #{visit.customer.fullname}
+
+        p
+            form(method='POST' action=visit.url+'/delete')
+                div.form-group
+                    input#visit.form-control(type='hidden', name='visitid', require='true', value=visit._id )
+                button.btn.btn-primary(type='submit') Smazat
+
+        p
+            a(href=visit.url) Zpět
+
+    if errors
+            ul
+                for error in errors
+                    li!= error.msg
+
+
+

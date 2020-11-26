@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1=title
+
+    ul
+        each customer in customer_list
+            li
+                a(href=customer.url) #{customer.fullname},
+                |  #{customer.phone}, #{customer.email}, #{customer.note}
+        else
+            li Žádní zákazníci v databázi
