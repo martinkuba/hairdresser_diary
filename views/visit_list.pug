@@ -4,7 +4,7 @@ block content
     h1=title
 
     ul
-        - visits_list.sort(function(a, b) {let dateA = new Date(a.date_from); let dateB = new Date(b.date_to); return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;});
+        - visits_list.sort(function(a, b) {let dateA = new Date(a.date_from); let dateB = new Date(b.date_to); return (dateA < dateB) ? 1 : (dateA > dateB) ? -1 : 0;});
         each visit in visits_list
             li
                 a(href=visit.url) #{visit.date}, #{visit.time_from} - #{visit.time_to}

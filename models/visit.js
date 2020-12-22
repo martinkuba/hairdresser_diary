@@ -20,6 +20,13 @@ VisitSchema
         return '/visits/' + this._id;
     });
 
+//Virtual for customer url
+VisitSchema
+    .virtual('customer_url')
+    .get(function() {
+        return '/customers/' + this.customer._id;
+    });
+
 // Virtual for the date of the visit
 VisitSchema
     .virtual('date')

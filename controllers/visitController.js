@@ -4,6 +4,24 @@ var Customer = require('../models/customer');
 const {body,validationResult} = require('express-validator');
 var moment = require('moment');
 
+//DIARY (index)
+exports.diary = function(req, res) {
+
+    const today = moment().startOf('day');
+
+    Visit.find({date_from: {
+                               $gte: today.toDate(),
+                               $lte: moment(today).endOf('day').toDate()
+                             }})
+        .populate('customer')
+//      .populate('hairdresser')
+        .exec(function (err, list_visits) {
+            if (err) {return next(err);}
+                //Successful so render
+                res.render('diary', {title: 'Diář', visits_list: list_visits});
+         });
+};
+
 //LIST of visits
 exports.visits = function(req, res, next) {
 

@@ -11,6 +11,9 @@ var visit_controller = require('../controllers/visitController');
 //});
 
 // GET Home page
-router.get('/', customer_controller.index);
+//router.get('/', customer_controller.index);
+
+//GET Diary Home page
+router.get('/', visit_controller.diary);
 
 module.exports = router;
