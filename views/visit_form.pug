@@ -7,7 +7,7 @@ block content
     form(method='POST' action='')
         div.form-group
             label(for='customer') Zákazník:
-            select#name.form-control(type='select' name='customer' placeholder='Vyber zákazníka' required='true')
+            select#select.form-control(type='select' name='customer' placeholder='Vyber zákazníka' required='true')
                 - customers_list.sort(function(a, b) {let textA = a.fullname.toUpperCase(); let textB = b.fullname.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
                 option(value='') -- select --
                 for customer in customers_list
@@ -18,11 +18,11 @@ block content
                    else
                         option(value=customer._id) #{customer.fullname}
             label(for='date') Od:
-            input#name.form-control(type='datetime-local' name='datetime_from' value=(undefined===visit ? '' : visit.date_from.toISOString().slice(0,-8)) required='true')
+            input#datetime_local.form-control(type='datetime-local' name='datetime_from' value=(undefined===visit ? '' : visit.date_from.toISOString().slice(0,-8)) required='true')
             label(for='time_from') Do:
-            input#name.form-control(type='datetime-local' name='datetime_to' value=(undefined===visit ? '' : visit.date_to.toISOString().slice(0,-8)) required='true')
+            input#datetime_local.form-control(type='datetime-local' name='datetime_to' value=(undefined===visit ? '' : visit.date_to.toISOString().slice(0,-8)) required='true')
             label(for='note') Poznámka:
-            input#name.form-control(type='text' name='note' value=(undefined===visit ? '' : visit.note))
+            input#text.form-control(type='text' name='note' value=(undefined===visit ? '' : visit.note))
         button.btn.btn-primary(type='submit') Uložit
 
 

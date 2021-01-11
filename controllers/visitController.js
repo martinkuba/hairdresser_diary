@@ -4,22 +4,47 @@ var Customer = require('../models/customer');
 const {body,validationResult} = require('express-validator');
 var moment = require('moment');
 
-//DIARY (index)
+//DIARY (index) GET
 exports.diary = function(req, res) {
 
     const today = moment().startOf('day');
 
     Visit.find({date_from: {
-                               $gte: today.toDate(),
-                               $lte: moment(today).endOf('day').toDate()
+                               $gte: today,
+                               $lte: moment(today).endOf('day')
                              }})
         .populate('customer')
 //      .populate('hairdresser')
         .exec(function (err, list_visits) {
             if (err) {return next(err);}
                 //Successful so render
-                res.render('diary', {title: 'Diář', visits_list: list_visits});
+                res.render('diary', {title: 'Diář', diary_date: today.format('YYYY-MM-DD'), diary_next_day: today.add(1,'days'), visits_list: list_visits});
          });
+};
+
+//DIARY POST
+exports.diary_post = function(req, res) {
+
+    if(req.body.next_diary_date) {
+         const search_date = req.body.next_diary_date;
+    }
+    else {
+        const search_date = req.body.diary_date;
+    }
+
+const search_date = req.body.diary_date;
+   // const today = moment().startOf('day');
+
+    Visit.find({date_from: {
+                               $gte: search_date,
+                               $lte: moment(req.body.diary_date).endOf('day').toDate()
+                             }})
+        .populate('customer')
+        .exec(function (err, list_visits) {
+            if (err) {return next(err);}
+            res.render('diary', {title:'Diář', diary_date: search_date, visits_list: list_visits});
+        });
+
 };
 
 //LIST of visits

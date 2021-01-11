@@ -11,6 +11,9 @@ var visitsRouter = require('./routes/visits');
 
 var app = express();
 
+//locals
+app.locals.moment = require('moment');
+
 //Set up mongoose connection
 var mongoose = require('mongoose');
 var dev_db_url = 'mongodb+srv://admin:admin@cluster0.zjsni.mongodb.net/hairdresser?retryWrites=true&w=majority';

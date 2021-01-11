@@ -16,4 +16,7 @@ var visit_controller = require('../controllers/visitController');
 //GET Diary Home page
 router.get('/', visit_controller.diary);
 
+//POST Diary Home page
+router.post('/', visit_controller.diary_post);
+
 module.exports = router;

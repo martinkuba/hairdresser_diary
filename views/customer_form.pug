@@ -6,15 +6,15 @@ block content
     form(method='POST' action='')
         div.form-group
             label(for='name') Jméno:
-            input#name.form-control(type='text' name='name' value=(undefined===customer ? '' : customer.name) placeholder="Doplnit validaci!!!" required='true')
+            input#text.form-control(type='text' name='name' value=(undefined===customer ? '' : customer.name) placeholder="Doplnit validaci!!!" required='true')
             label(for='surname') Příjmení:
-            input#name.form-control(type='text' name='surname' value=(undefined===customer ? '' : customer.surname) )
+            input#text.form-control(type='text' name='surname' value=(undefined===customer ? '' : customer.surname) )
             label(for='phone') Telefon:
-            input#name.form-control(type='text' name='phone' value=(undefined===customer ? '' : customer.phone) placeholder="Doplnit validaci!!!")
+            input#text.form-control(type='text' name='phone' value=(undefined===customer ? '' : customer.phone) placeholder="Doplnit validaci!!!")
             label(for='email') E-mail:
-            input#name.form-control(type='text' name='email' value=(undefined===customer ? '' : customer.email) placeholder="Doplnit validaci!!!")
+            input#text.form-control(type='text' name='email' value=(undefined===customer ? '' : customer.email) placeholder="Doplnit validaci!!!")
             label(for='note') Poznámka:
-            input#name.form-control(type='textarea' name='note' value=(undefined===customer ? '' : customer.note) )
+            input#textarea.form-control(type='textarea' name='note' value=(undefined===customer ? '' : customer.note) )
         button.btn.btn-primary(type='submit') Submit
 
     if customer

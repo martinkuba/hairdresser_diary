@@ -2,6 +2,19 @@ extends layout
 
 block content
     h1=title
+    p
+        #{diary_date}
+
+    form(method='POST' action='')
+        div.form-group
+            label(for='diary_date') Objednávky k datu
+            input#date.form-control(type='date' name='diary_date' value=(diary_date) required='true')
+            button.btn.btn-primary(type='submit') Zobrazit
+    form(method='POST' action='')
+        div.form-group
+            input#hidden.form-control(type='hidden' name='diary_next_day' value=(diary_date))
+            button.btn.btn-primary(type='submit') Další den
+
 
     ul
         - visits_list.sort(function(a, b) {let dateA = new Date(a.date_from); let dateB = new Date(b.date_from); return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;});
@@ -14,4 +27,4 @@ block content
                 a(href=visit.url) upravit,&nbsp;
                 | smazat
         else
-            li Žádné objednávky
+            p Pro tento den nejsou žádné objednávky
