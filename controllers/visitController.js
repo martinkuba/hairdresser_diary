@@ -18,22 +18,15 @@ exports.diary = function(req, res) {
         .exec(function (err, list_visits) {
             if (err) {return next(err);}
                 //Successful so render
-                res.render('diary', {title: 'Diář', diary_date: today.format('YYYY-MM-DD'), diary_next_day: today.add(1,'days'), visits_list: list_visits});
+                res.render('diary', {title: 'Diář', diary_date: today.format('YYYY-MM-DD'), visits_list: list_visits});
          });
 };
 
 //DIARY POST
-exports.diary_post = function(req, res) {
+exports.diary_post = function(req, res, next) {
 
-    if(req.body.next_diary_date) {
-         const search_date = req.body.next_diary_date;
-    }
-    else {
-        const search_date = req.body.diary_date;
-    }
-
-const search_date = req.body.diary_date;
-   // const today = moment().startOf('day');
+    let search_date;
+    search_date = moment(req.body.diary_date);
 
     Visit.find({date_from: {
                                $gte: search_date,
@@ -42,7 +35,7 @@ const search_date = req.body.diary_date;
         .populate('customer')
         .exec(function (err, list_visits) {
             if (err) {return next(err);}
-            res.render('diary', {title:'Diář', diary_date: search_date, visits_list: list_visits});
+            res.render('diary', {title:'Diář', diary_date: search_date.format('YYYY-MM-DD'), visits_list: list_visits});
         });
 
 };

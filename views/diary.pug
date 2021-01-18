@@ -2,18 +2,30 @@ extends layout
 
 block content
     h1=title
-    p
-        #{diary_date}
 
-    form(method='POST' action='')
-        div.form-group
-            label(for='diary_date') Objednávky k datu
-            input#date.form-control(type='date' name='diary_date' value=(diary_date) required='true')
-            button.btn.btn-primary(type='submit') Zobrazit
-    form(method='POST' action='')
-        div.form-group
-            input#hidden.form-control(type='hidden' name='diary_next_day' value=(diary_date))
-            button.btn.btn-primary(type='submit') Další den
+    p
+        #{next_day}
+
+    table.table
+        tr
+            td
+                form(method='POST' action='')
+                    div.form-group
+                        p Předchozí den: #{moment(diary_date).add(-1,'days').format('DD.MM.YYYY')}
+                        input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(-1,'days')))
+                        button.btn.btn-primary(type='submit') Předchozí den
+            td
+                form(method='POST' action='')
+                    div.form-group
+                        label(for='diary_date') Objednávky k datu
+                        input#date.form-control(type='date' name='diary_date' value=(diary_date) required='true')
+                        button.btn.btn-primary(type='submit') Zobrazit
+            td
+                form(method='POST' action='')
+                    div.form-group
+                        p Následující den: #{moment(diary_date).add(1,'days').format('DD.MM.YYYY')}
+                        input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(1,'days')))
+                        button.btn.btn-primary(type='submit') Další den
 
 
     ul
