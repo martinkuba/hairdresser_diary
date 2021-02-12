@@ -6,7 +6,7 @@ block content
     p
         #{next_day}
 
-    table.table
+    table.table_form
         tr
             td
                 form(method='POST' action='')
@@ -23,20 +23,40 @@ block content
             td
                 form(method='POST' action='')
                     div.form-group
+                        label(for='diary_customer') Objednávky zákazníka
+                        select#select.form-control(type='select' name='customer' required='true')
+                                        - customers_list.sort(function(a, b) {let textA = a.fullname.toUpperCase(); let textB = b.fullname.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+                                        option(value='') -- select --
+                                        for customer in customers_list
+                                            option(value=customer._id) #{customer.fullname}
+                        button.btn.btn-primary(type='submit') Zobrazit
+            td
+                form(method='POST' action='')
+                    div.form-group
                         p Následující den: #{moment(diary_date).add(1,'days').format('DD.MM.YYYY')}
                         input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(1,'days')))
                         button.btn.btn-primary(type='submit') Další den
 
 
-    ul
+    table.table_orders
         - visits_list.sort(function(a, b) {let dateA = new Date(a.date_from); let dateB = new Date(b.date_from); return (dateA < dateB) ? -1 : (dateA > dateB) ? 1 : 0;});
         each visit in visits_list
-            li
-                a(href=visit.url) #{visit.date},&nbsp;#{visit.time_from} - #{visit.time_to},&nbsp;
-                |
-                a(href=visit.customer_url) #{visit.customer.fullname},&nbsp;
-                |#{visit.note},&nbsp;
-                a(href=visit.url) upravit,&nbsp;
-                | smazat
+           tr
+                td
+                    a(href=visit.url) #{visit.date},&nbsp;#{visit.time_from} - #{visit.time_to},&nbsp;
+                    |
+                    a(href=visit.customer_url) #{visit.customer.fullname},&nbsp;
+                    |#{visit.note},&nbsp;
+                    a(href=visit.url) upravit,&nbsp;
+                    | smazat
+
+
         else
             p Pro tento den nejsou žádné objednávky
+
+    p
+        form(method='GET' action='visits/create')
+            div.form-group
+                input#customerid.form-control(type='hidden', name='new_order', require='true')
+            button.btn.btn-primary(type='submit') Nová objednávka
+

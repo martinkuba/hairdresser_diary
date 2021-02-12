@@ -9,17 +9,26 @@ exports.diary = function(req, res) {
 
     const today = moment().startOf('day');
 
-    Visit.find({date_from: {
+     async.parallel({
+            customers: function(callback){
+                  Customer.find({}, 'name surname')
+                    .exec(callback)
+                },
+
+            visits: function(callback) {
+                    Visit.find({date_from: {
                                $gte: today,
                                $lte: moment(today).endOf('day')
                              }})
-        .populate('customer')
-//      .populate('hairdresser')
-        .exec(function (err, list_visits) {
-            if (err) {return next(err);}
+                        .populate('customer')
+                        .exec(callback);
+                },
+            }, function (err, results) {
+                if (err) {return next(err);}
                 //Successful so render
-                res.render('diary', {title: 'Diář', diary_date: today.format('YYYY-MM-DD'), visits_list: list_visits});
-         });
+                    res.render('diary', {title: 'Diář', diary_date: today.format('YYYY-MM-DD'), visits_list: results.visits, customers_list: results.customers});
+                }
+            );
 };
 
 //DIARY POST
