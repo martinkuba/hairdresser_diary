@@ -90,7 +90,7 @@ exports.customer_create_post = function (req, res, next) {
         });
 };
 
-//GET UPDATE customer form
+//Customer UPDATE on GET
 exports.customer_update_get = function(req, res, next) {
     Customer.findById(req.params.id)
         .populate('customer')
@@ -106,7 +106,7 @@ exports.customer_update_get = function(req, res, next) {
         })
 };
 
-//Handle customer UPDATE form on POST
+//Customer UPDATE on POST
 exports.customer_update_post = function(req, res, next) {
 
 
@@ -129,12 +129,12 @@ exports.customer_update_post = function(req, res, next) {
    });
 };
 
-//Handle Customer DELETE on POST
+//Customer DELETE on POST
 exports.customer_delete_post = function(req, res, next) {
 
     Customer.findByIdAndRemove(req.body.customerid, function deleteCustomer(err) {
         if (err) {return next(err);}
-        res.render('index', { title: 'Kadeřnický diář', error: err, data: results })
+        res.render('diary', { title: 'Kadeřnický diář', error: err})
     })
 };
 

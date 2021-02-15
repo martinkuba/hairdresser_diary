@@ -26,12 +26,12 @@ block content
         a(href='/visits/create?customerid=' + customer._id) Nová objednávka
     hr
     p
-       form(method='POST' action='')
+       form(method='POST' action=customer.url)
         div.form-group
             input#customerid.form-control(type='hidden', name='customerid', require='true', value=customer._id )
         button.btn.btn-primary(type='submit') Smazat
 
-        form(method='GET' action=customer.url+'/update')
+       form(method='GET' action=customer.url+'/update')
          div.form-group
              input#customerid.form-control(type='hidden', name='customerid', required='true', value=customer._id)
          button.btn.btn-primary(type='submit') Upravit

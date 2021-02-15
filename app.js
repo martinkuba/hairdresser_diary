@@ -18,7 +18,7 @@ app.locals.moment = require('moment');
 var mongoose = require('mongoose');
 var dev_db_url = 'mongodb+srv://admin:admin@cluster0.zjsni.mongodb.net/hairdresser?retryWrites=true&w=majority';
 var mongoDB = process.env.MONGODB_URI || dev_db_url;
-mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true});
+mongoose.connect(mongoDB, { useNewUrlParser: true , useUnifiedTopology: true , useFindAndModify: false});
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
