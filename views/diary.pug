@@ -9,17 +9,27 @@ block content
     table.table_form
         tr
             td
-                form(method='POST' action='')
-                    div.form-group
-                        p Předchozí den: #{moment(diary_date).add(-1,'days').format('DD.MM.YYYY')}
-                        input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(-1,'days')))
-                        button.btn.btn-primary(type='submit') Předchozí den
+                div.form-group
+                    label(for='diary_date') Objednávky k datu
+        tr
             td
                 form(method='POST' action='')
                     div.form-group
-                        label(for='diary_date') Objednávky k datu
+                        input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(-1,'days')))
+                        button.btn.btn-primary(type='submit') Předchozí den #{moment(diary_date).add(-1,'days').format('DD.MM.YYYY')}
+            td
+                form(method='POST' action='')
+                    div.form-group
+                         input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(1,'days')))
+                         button.btn.btn-primary(type='submit') Následující den #{moment(diary_date).add(1,'days').format('DD.MM.YYYY')}
+        tr
+            td
+                form(method='POST' action='')
+                    div.form-group
                         input#date.form-control(type='date' name='diary_date' value=(diary_date) required='true')
                         button.btn.btn-primary(type='submit') Zobrazit
+
+        tr
             td
                 form(method='POST' action='')
                     div.form-group
@@ -30,12 +40,7 @@ block content
                                         for customer in customers_list
                                             option(value=customer._id) #{customer.fullname}
                         button.btn.btn-primary(type='submit') Zobrazit
-            td
-                form(method='POST' action='')
-                    div.form-group
-                        p Následující den: #{moment(diary_date).add(1,'days').format('DD.MM.YYYY')}
-                        input#hidden.form-control(type='hidden' name='diary_date' value=(moment(diary_date).add(1,'days')))
-                        button.btn.btn-primary(type='submit') Další den
+
 
 
     table.table_orders

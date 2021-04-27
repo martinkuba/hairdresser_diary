@@ -6,9 +6,9 @@ var Schema = mongoose.Schema;
 var VisitSchema = new Schema(
     {
        date_from:{type: Date, required: true},
-       date_to: {type: Date, required: true},
+       date_to: {type: Date},
        note: {type: String},
-       hairdresser: {type: Schema.Types.ObjectId, ref: 'User'},
+//     hairdresser: {type: Schema.Types.ObjectId, ref: 'User'},
        customer: {type: Schema.Types.ObjectId, ref: 'Customer', required: true},
     }
 );

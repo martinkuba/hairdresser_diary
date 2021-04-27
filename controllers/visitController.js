@@ -1,8 +1,9 @@
-var Visit = require('../models/visit');
+var Visit = require('../models/visitModel');
+var Customer = require('../models/customerModel');
 var async = require('async');
-var Customer = require('../models/customer');
 const {body,validationResult} = require('express-validator');
 var moment = require('moment');
+var mongoose = require('mongoose');
 
 //DIARY (index) GET
 exports.diary = function(req, res) {
@@ -37,19 +38,38 @@ exports.diary_post = function(req, res, next) {
     let search_date;
     search_date = moment(req.body.diary_date);
 
-    Visit.find({date_from: {
-                               $gte: search_date,
-                               $lte: moment(req.body.diary_date).endOf('day').toDate()
-                             }})
-        .populate('customer')
-        .exec(function (err, list_visits) {
-            if (err) {return next(err);}
-            res.render('diary', {title:'Diář', diary_date: search_date.format('YYYY-MM-DD'), visits_list: list_visits});
-        });
+    async.parallel(
+        {
+            customers: function(callback)
+                {
+                    Customer.find({},'name surname')
+                        .exec(callback)
+                },
+            visits: function(callback)
+                {
+                    Visit.find(
+                        {
+                            date_from:
+                                {
+                                    $gte: search_date,
+                                    $lte: moment(req.body.diary_date).endOf('day').toDate()
+                                }
+                        }
+                    )
+                    .populate('customer')
+                    .exec(callback);
+                },
+        },
+        function (err, results)
+            {
+                if (err) {return next(err);}
+                res.render('diary', {title:'Diář', diary_date: search_date.format('YYYY-MM-DD'), visits_list: results.visits, customers_list: results.customers});
+            }
+    );
 
 };
 
-//LIST of visits
+//Display LIST of visits
 exports.visits = function(req, res, next) {
 
     Visit.find()
@@ -62,27 +82,11 @@ exports.visits = function(req, res, next) {
          });
 };
 
-//GET DETAIL of visit
-exports.visit_detail = function(req, res, next) {
-
-   Visit.findById(req.params.id)
-        .populate('customer')
-        .exec(function (err, visit){
-            if(err) {return next (err);}
-            if(visit==null) {
-                var err = new Error('Objednávka nenalezena');
-                err.status = 404;
-                return next(err);
-            }
-
-            res.render('visit_detail',{title: 'Objednávka', visit: visit});
-        })
-};
-
-//GET CREATE visit form
+//CREATE Visit GET
 exports.create_visit_get = function(req, res, next) {
 
-    async.parallel({
+ //   res.render('visit_form', {title: 'Nová objednávka',});
+   async.parallel({
         customers: function(callback){
               Customer.find({}, 'name surname')
                 .exec(callback)
@@ -95,7 +99,7 @@ exports.create_visit_get = function(req, res, next) {
     );
 };
 
-//POST CREATE visit form
+//CREATE Visit POST
 exports.create_visit_post = [
 
     //Validate fields
@@ -141,7 +145,24 @@ exports.create_visit_post = [
   }
 ];
 
-//GET UPDATE visit form
+//Display DETAIL of visit on GET
+exports.visit_detail = function(req, res, next) {
+
+       Visit.findById(req.params.id)
+            .populate('customer')
+            .exec(function (err, visit){
+                if(err) {return next (err);}
+                if(visit==null) {
+                    var err = new Error('Objednávka nenalezena');
+                    err.status = 404;
+                    return next(err);
+                }
+
+                res.render('visit_detail',{title: 'Objednávka', visit: visit});
+            })
+};
+
+//Display UPDATE visit form on GET
 exports.update_visit_get = function(req, res, next) {
 
   async.parallel({
@@ -162,7 +183,7 @@ exports.update_visit_get = function(req, res, next) {
     );
 };
 
-//POST UPDATE visit form
+//Handle UPDATE visit form on POST
 exports.update_visit_post = function(req, res, next) {
 
 // ADD validations
@@ -184,7 +205,7 @@ exports.update_visit_post = function(req, res, next) {
         });
 };
 
-//GET DELETE visit form
+//Display DELETE visit form on GET
 exports.delete_visit_get = function(req, res, next) {
 
      Visit.findById(req.params.id)
@@ -201,7 +222,7 @@ exports.delete_visit_get = function(req, res, next) {
            })
 };
 
-//POST DELETE visit
+//Handle DELETE visit form on POST
 exports.delete_visit_post = function(req, res, next) {
 
     Visit.findByIdAndRemove(req.params.id, function deleteVisit(err) {

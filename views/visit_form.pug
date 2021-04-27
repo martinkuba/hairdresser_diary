@@ -20,7 +20,7 @@ block content
             label(for='date') Od:
             input#datetime_local.form-control(type='datetime-local' name='datetime_from' value=(undefined===visit ? '' : visit.date_from.toISOString().slice(0,-8)) required='true')
             label(for='time_from') Do:
-            input#datetime_local.form-control(type='datetime-local' name='datetime_to' value=(undefined===visit ? '' : visit.date_to.toISOString().slice(0,-8)) required='true')
+            input#datetime_local.form-control(type='datetime-local' name='datetime_to' value=(undefined===visit ? '' : visit.date_to.toISOString().slice(0,-8)) )
             label(for='note') Poznámka:
             input#text.form-control(type='text' name='note' value=(undefined===visit ? '' : visit.note))
         button.btn.btn-primary(type='submit') Uložit

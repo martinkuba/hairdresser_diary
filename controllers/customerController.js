@@ -1,27 +1,9 @@
-var Customer = require('../models/customer');
-var Visit = require('../models/visit');
-var User = require('../models/user');
+var Customer = require('../models/customerModel');
+var Visit = require('../models/visitModel');
+//var User = require('../models/userModel');
 var async = require('async');
 
-//Index
-exports.index = function(req, res) {
-
-//get the number of customers and visits in DB
-   async.parallel({
-        customers_count: function(callback) {
-            Customer.countDocuments({}, callback);
-        },
-
-        visits_count: function(callback) {
-           Visit.countDocuments({}, callback);
-       }
-
-   }, function(err, results) {
-      res.render('index', { title: 'Kadeřnický diář', error: err, data: results });
-   });
-};
-
-//LIST of customers
+//Display LIST of customers
 exports.customers = function(req, res, next) {
 //    res.send('NOT IMPLEMENTED');
     Customer.find()
@@ -35,7 +17,34 @@ exports.customers = function(req, res, next) {
         });
 };
 
-//DETAIL of the customer
+//Display CREATE customer form on GET
+exports.customer_create_get = function(req, res, next) {
+    res.render('customer_form', {title: 'Nový zákazník'});
+
+};
+
+//Handle CREATE customer form on POST
+exports.customer_create_post = function (req, res, next) {
+
+      //!!! Doplnit validaci dat
+
+        //Create customer object
+        var customer = new Customer(
+            {
+                name: req.body.name,
+                surname: req.body.surname,
+                phone: req.body.phone,
+                email: req.body.email,
+                note: req.body.note
+            });
+        //Save the customer in DB
+        customer.save(function (err) {
+            if (err) {return (err);}
+            res.redirect('/customers');
+        });
+};
+
+//Display DETAIL of customer on GET
 exports.customer_detail = function(req, res, next) {
     async.parallel({
         customer: function(callback) {
@@ -63,34 +72,7 @@ exports.customer_detail = function(req, res, next) {
     );
 };
 
-//Display customer create form on GET
-exports.customer_create_get = function(req, res, next) {
-    res.render('customer_form', {title: 'Nový zákazník'});
-
-};
-
-// CREATE POST Handling
-exports.customer_create_post = function (req, res, next) {
-
-      //!!! Doplnit validaci dat
-
-        //Create customer object
-        var customer = new Customer(
-            {
-                name: req.body.name,
-                surname: req.body.surname,
-                phone: req.body.phone,
-                email: req.body.email,
-                note: req.body.note
-            });
-        //Save the customer in DB
-        customer.save(function (err) {
-            if (err) {return (err);}
-            res.redirect('/customers');
-        });
-};
-
-//Customer UPDATE on GET
+//Display UPDATE customer form on GET
 exports.customer_update_get = function(req, res, next) {
     Customer.findById(req.params.id)
         .populate('customer')
@@ -106,7 +88,7 @@ exports.customer_update_get = function(req, res, next) {
         })
 };
 
-//Customer UPDATE on POST
+//Handle UPDATE customer form on POST
 exports.customer_update_post = function(req, res, next) {
 
 
@@ -129,7 +111,10 @@ exports.customer_update_post = function(req, res, next) {
    });
 };
 
-//Customer DELETE on POST
+//Display DELETE customer form on GET
+//ToDo
+
+//Handle DELETE customer form on POST
 exports.customer_delete_post = function(req, res, next) {
 
     Customer.findByIdAndRemove(req.body.customerid, function deleteCustomer(err) {
@@ -137,4 +122,24 @@ exports.customer_delete_post = function(req, res, next) {
         res.render('diary', { title: 'Kadeřnický diář', error: err})
     })
 };
+
+//Index (not used)
+/*
+exports.index = function(req, res) {
+
+//get the number of customers and visits in DB
+   async.parallel({
+        customers_count: function(callback) {
+            Customer.countDocuments({}, callback);
+        },
+
+        visits_count: function(callback) {
+           Visit.countDocuments({}, callback);
+       }
+
+   }, function(err, results) {
+      res.render('index', { title: 'Kadeřnický diář', error: err, data: results });
+   });
+};
+*/
 

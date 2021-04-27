@@ -4,9 +4,10 @@ var Schema = mongoose.Schema;
 
 var CustomerSchema = new Schema (
     {
+  //    _id: {type:String},
         name: {type: String, required: true},
         surname: {type: String},
-        hairdresser: {type: Schema.Types.ObjectId, ref: 'User'},
+ //     hairdresser: {type: Schema.Types.ObjectId, ref: 'User'},
         phone: {type: String},
         email: {type: String},
         note: {type: String},

@@ -4,25 +4,28 @@ var router = express.Router();
 //Require controller modules
 var customer_controller = require('../controllers/customerController');
 
-//GET request for LIST of all customers
+//LIST GET request for display all customers
 router.get('/', customer_controller.customers);
 
-//GET request for redirect to customer CREATE form page
+//CREATE GET request for redirect to customer form page
 router.get('/create', customer_controller.customer_create_get);
 
-//POST request for saving the NEW customer
+//CREATE POST request for saving the NEW customer
 router.post('/create', customer_controller.customer_create_post);
 
-//GET request for display customer DETAIL
+//DETAIL GET request for display customer detail
 router.get('/:id', customer_controller.customer_detail);
 
-//POST request to DELETE customer
-router.post('/:id', customer_controller.customer_delete_post);
-
-//GET request to UPDATE customer
+//UPDATE GET request for redirect to customer form
 router.get('/:id/update', customer_controller.customer_update_get);
 
-//POST request to UPDATE customer
+//UPDATE POST request for saving updated customer
 router.post('/:id/update', customer_controller.customer_update_post);
+
+//DELETE GET request for redirect to customer delete confirm page
+router.get('/:id/delete')
+
+//DELETE POST request for deleting the customer
+router.post('/:id', customer_controller.customer_delete_post);
 
 module.exports = router;
